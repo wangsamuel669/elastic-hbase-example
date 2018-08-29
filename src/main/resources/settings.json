@@ -1,0 +1,14 @@
+{
+  "index": {
+    "refresh_interval": "1s",
+    "number_of_shards": "5",
+    "translog": {
+      "sync_interval": "1s",
+      "durability": "async"
+    },
+    "store": {
+      "type": "fs"
+    },
+    "number_of_replicas": "1"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "my_type": {
+    "_all": {
+      "enable": true
+    },
+    "properties": {
+      "id": {
+        "type": "long"
+      },
+      "province": {
+        "type": "keyword"
+      },
+      "city": {
+        "type": "keyword"
+      },
+      "county": {
+        "type": "keyword"
+      },
+      "subname": {
+        "type": "keyword"
+      },
+      "type": {
+        "type": "keyword"
+      },
+      "name": {
+        "type": "keyword"
+      },
+      "xcoord": {
+        "type": "keyword"
+      },
+      "ycoord": {
+        "type": "keyword"
+      },
+      "insertTime": {
+        "type":"date",
+        "format":"date_time"
+      }
+    }
+  }
+}
