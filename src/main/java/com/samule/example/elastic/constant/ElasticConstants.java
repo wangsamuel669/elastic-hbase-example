@@ -3,8 +3,6 @@ package com.samule.example.elastic.constant;
 import java.time.format.DateTimeFormatter;
 
 public class ElasticConstants {
-	public static final String INDEX_NAME = "my_index";
-	public static final String TYPE_NAME = "my_type";
 
 	//index_filed_name
 	public static final String INDEX_FIELD_ID = "id";
@@ -19,4 +17,6 @@ public class ElasticConstants {
 	public static final String INDEX_FIELD_TIME = "insertTime";
 
 	public static final DateTimeFormatter STANDARD_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	public static final DateTimeFormatter STANDARD_ZONE_FORMATTER =
+			DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSZZ");
 }

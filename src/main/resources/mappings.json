@@ -1,7 +1,7 @@
 {
   "my_type": {
     "_all": {
-      "enable": true
+      "enabled": false
     },
     "properties": {
       "id": {
@@ -16,24 +16,35 @@
       "county": {
         "type": "keyword"
       },
-      "subname": {
-        "type": "keyword"
-      },
       "type": {
         "type": "keyword"
       },
       "name": {
         "type": "keyword"
       },
+      "subname": {
+        "type": "keyword"
+      },
+      /*"details": {
+        "type": "nested",
+        "properties": {
+          "name": {
+            "type": "keyword"
+          },
+          "subname": {
+            "type": "keyword"
+          }
+        }
+      },*/
       "xcoord": {
         "type": "keyword"
       },
       "ycoord": {
         "type": "keyword"
       },
-      "insertTime": {
-        "type":"date",
-        "format":"date_time"
+      "userInfo": {
+        "type": "keyword",
+        "index": false
       }
     }
   }
