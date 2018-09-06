@@ -2,28 +2,25 @@ package com.samule.example.elastic.pojo;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 
-import java.util.List;
-
 @Document(indexName = "#{applicationProperty.indexName}", type = "#{applicationProperty.typeName}", createIndex = false)
 public class MyDocument {
-	private long id;
+	private String id;
 	private String province;
 	private String city;
 	private String county;
 	private String subname;
 	private String type;
-//	private List<Detail> details;
 	private String name;
 	private String xcoord;
 	private String ycoord;
 
 	private String userInfo;
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -58,14 +55,6 @@ public class MyDocument {
 	public void setType(String type) {
 		this.type = type;
 	}
-
-	/*public List<Detail> getDetails() {
-		return details;
-	}
-
-	public void setDetails(List<Detail> details) {
-		this.details = details;
-	}*/
 
 	public String getXcoord() {
 		return xcoord;
@@ -106,25 +95,4 @@ public class MyDocument {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	/*public static class Detail {
-		private String name;
-		private String subname;
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getSubname() {
-			return subname;
-		}
-
-		public void setSubname(String subname) {
-			this.subname = subname;
-		}
-	}*/
 }

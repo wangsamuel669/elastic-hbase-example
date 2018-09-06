@@ -56,7 +56,7 @@ public class MyService {
 
 	private MyDocument getMyDocumentFromCsv(CSVRecord csvRecord) {
 		MyDocument document = new MyDocument();
-		document.setId(Long.parseLong(csvRecord.get("id")));
+		document.setId(csvRecord.get("id"));
 		document.setProvince(csvRecord.get("province"));
 		document.setCity(csvRecord.get("city"));
 		document.setCounty(csvRecord.get("county"));
@@ -70,9 +70,8 @@ public class MyService {
 		return document;
 	}
 
-	public int search(MyDocument document) {
-		List list = elasticService.search(document);
-		return list.size();
+	public List search(MyDocument document) {
+		return elasticService.search(document);
 	}
 
 	private UserInfo getUserInfo() {

@@ -87,7 +87,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.name}-${project.version}-${maven.build.timestamp}</finalName>
+        <finalName>${project.name}-analyzer-${project.version}-${maven.build.timestamp}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

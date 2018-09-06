@@ -5,7 +5,7 @@
     },
     "properties": {
       "id": {
-        "type": "long"
+        "type": "keyword"
       },
       "province": {
         "type": "keyword"
@@ -20,22 +20,11 @@
         "type": "keyword"
       },
       "name": {
-        "type": "keyword"
+        "type": "text"
       },
       "subname": {
-        "type": "keyword"
+        "type": "text"
       },
-      /*"details": {
-        "type": "nested",
-        "properties": {
-          "name": {
-            "type": "keyword"
-          },
-          "subname": {
-            "type": "keyword"
-          }
-        }
-      },*/
       "xcoord": {
         "type": "keyword"
       },

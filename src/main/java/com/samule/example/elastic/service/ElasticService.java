@@ -2,12 +2,13 @@ package com.samule.example.elastic.service;
 
 import com.alibaba.fastjson.JSONReader;
 import com.samule.example.elastic.pojo.MyDocument;
-import org.elasticsearch.common.unit.Fuzziness;
+import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
@@ -69,32 +70,16 @@ public class ElasticService {
 	}
 
 	private SearchQuery getSearchQuery(MyDocument document) {
-//		String name = document.getDetails().get(0).getName();
-//		String subname = document.getDetails().get(0).getSubname();
 		QueryBuilder queryBuilder = QueryBuilders.boolQuery()
-				.must(QueryBuilders.termQuery(INDEX_FIELD_ID, document.getId()))
-				.must(QueryBuilders.termQuery(INDEX_FIELD_PROVINCE, document.getProvince()))
-				.must(QueryBuilders.termQuery(INDEX_FIELD_CITY, document.getCity()))
-				.must(QueryBuilders.termQuery(INDEX_FIELD_COUNTY, document.getCounty()))
-				.must(QueryBuilders.termQuery(INDEX_FIELD_TYPE, document.getType()))
-				.must(QueryBuilders.constantScoreQuery(QueryBuilders.fuzzyQuery(INDEX_FIELD_NAME, document.getName())
-						.fuzziness(Fuzziness.ONE)
-						.maxExpansions(50)
-						.transpositions(false)))
-				.must(QueryBuilders.termQuery(INDEX_FIELD_SUBNAME, document.getSubname()))
-				/*.should(QueryBuilders.boolQuery().filter(QueryBuilders.fuzzyQuery(INDEX_FIELD_SUBNAME, document.getSubname())
-						.fuzziness(Fuzziness.ONE)
-						.maxExpansions(50)
-						.transpositions(false)))
-				.should(QueryBuilders.boolQuery().filter(QueryBuilders.fuzzyQuery(INDEX_FIELD_NAME, document.getName())
-						.fuzziness(Fuzziness.ONE)
-						.maxExpansions(50)
-						.transpositions(false)))*/
-
-//				.filter(QueryBuilders.constantScoreQuery(QueryBuilders.nestedQuery("details", getDetailQuery(name, subname), ScoreMode.Max)));
-				.must(QueryBuilders.termQuery(INDEX_FIELD_XCOORD, document.getXcoord()))
-				.must(QueryBuilders.termQuery(INDEX_FIELD_YCOORD, document.getYcoord()));
-//				.minimumShouldMatch(1);
+//				.must(QueryBuilders.termQuery(INDEX_FIELD_ID, document.getId()))
+//				.must(QueryBuilders.termQuery(INDEX_FIELD_PROVINCE, document.getProvince()))
+//				.must(QueryBuilders.termQuery(INDEX_FIELD_CITY, document.getCity()))
+//				.must(QueryBuilders.termQuery(INDEX_FIELD_COUNTY, document.getCounty()))
+//				.must(QueryBuilders.termQuery(INDEX_FIELD_TYPE, document.getType()))
+				.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(INDEX_FIELD_NAME, document.getName()).operator(Operator.AND)))
+				.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(INDEX_FIELD_SUBNAME, document.getSubname()).operator(Operator.AND)));
+//				.must(QueryBuilders.termQuery(INDEX_FIELD_XCOORD, document.getXcoord()))
+//				.must(QueryBuilders.termQuery(INDEX_FIELD_YCOORD, document.getYcoord()));
 
 		return new NativeSearchQueryBuilder()
 				.withIndices(indexName)
@@ -102,22 +87,8 @@ public class ElasticService {
 				.withQuery(queryBuilder)
 //				.withPageable(PageRequest.of(0, 100))
 //				.withSort(SortBuilders.scoreSort())
-//				.withSourceFilter(new FetchSourceFilter(new String[]{"userInfo"}, null))
+				.withSourceFilter(new FetchSourceFilter(new String[]{"userInfo"}, null))
 				.build();
-	}
-
-	private QueryBuilder getDetailQuery(String name, String subname) {
-		return QueryBuilders.boolQuery()
-				.should(getFuzzyQuery("details.name", name))
-				.should(getFuzzyQuery("details.subname", subname))
-				.minimumShouldMatch(1);
-	}
-
-	private QueryBuilder getFuzzyQuery(String field, String value) {
-		return QueryBuilders.fuzzyQuery(field, value)
-				.fuzziness(Fuzziness.AUTO)
-				.maxExpansions(50)
-				.transpositions(false);
 	}
 
 	private String readJsonFile(String filePath) throws IOException {

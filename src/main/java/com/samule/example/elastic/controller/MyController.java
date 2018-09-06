@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 public class MyController {
@@ -20,9 +21,8 @@ public class MyController {
 	private MyService myService;
 
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public void search(@RequestBody MyDocument document) {
-		int count = myService.search(document);
-		logger.debug("{}", count);
+	public List search(@RequestBody MyDocument document) {
+		return myService.search(document);
 	}
 
 	@RequestMapping(value = "/load", method = RequestMethod.GET)

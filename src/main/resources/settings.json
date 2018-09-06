@@ -9,6 +9,13 @@
     "store": {
       "type": "fs"
     },
-    "number_of_replicas": "1"
+    "number_of_replicas": "1",
+    "analysis": {
+      "analyzer": {
+        "addr_analyzer": {
+          "type": "standard"
+        }
+      }
+    }
   }
 }
