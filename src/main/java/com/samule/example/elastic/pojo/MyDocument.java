@@ -9,8 +9,10 @@ public class MyDocument {
 	private String city;
 	private String county;
 	private String subname;
+	private String subsize;
 	private String type;
 	private String name;
+	private String size;
 	private String xcoord;
 	private String ycoord;
 
@@ -94,5 +96,21 @@ public class MyDocument {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getSubsize() {
+		return subsize;
+	}
+
+	public void setSubsize(String subsize) {
+		this.subsize = subsize;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
 	}
 }

@@ -15,6 +15,7 @@ public class ElasticConstants {
 	public static final String INDEX_FIELD_XCOORD = "xcoord";
 	public static final String INDEX_FIELD_YCOORD = "ycoord";
 	public static final String INDEX_FIELD_TIME = "insertTime";
+	public static final String INDEX_FIELD_SIZE = "size";
 
 	public static final DateTimeFormatter STANDARD_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	public static final DateTimeFormatter STANDARD_ZONE_FORMATTER =

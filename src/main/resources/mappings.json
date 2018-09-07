@@ -31,6 +31,12 @@
       "ycoord": {
         "type": "keyword"
       },
+      "subsize": {
+        "type": "keyword"
+      },
+      "size": {
+        "type": "keyword"
+      },
       "userInfo": {
         "type": "keyword",
         "index": false
