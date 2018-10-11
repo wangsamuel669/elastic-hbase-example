@@ -2,20 +2,18 @@ package com.samule.example.elastic.pojo;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import java.util.List;
+
 @Document(indexName = "#{applicationProperty.indexName}", type = "#{applicationProperty.typeName}", createIndex = false)
 public class MyDocument {
 	private String id;
 	private String province;
 	private String city;
 	private String county;
-	private String subname;
-	private String subsize;
 	private String type;
-	private String name;
-	private String size;
 	private String xcoord;
 	private String ycoord;
-
+	private List<Detail> detail;
 	private String userInfo;
 
 	public String getId() {
@@ -82,35 +80,50 @@ public class MyDocument {
 		this.userInfo = userInfo;
 	}
 
-	public String getSubname() {
-		return subname;
+	public List<Detail> getDetail() {
+		return detail;
 	}
 
-	public void setSubname(String subname) {
-		this.subname = subname;
+	public void setDetail(List<Detail> detail) {
+		this.detail = detail;
 	}
 
-	public String getName() {
-		return name;
-	}
+	public static class Detail {
+		private String subname;
+		private String subsize;
+		private String name;
+		private String size;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+		public String getSubname() {
+			return subname;
+		}
 
-	public String getSubsize() {
-		return subsize;
-	}
+		public void setSubname(String subname) {
+			this.subname = subname;
+		}
 
-	public void setSubsize(String subsize) {
-		this.subsize = subsize;
-	}
+		public String getSubsize() {
+			return subsize;
+		}
 
-	public String getSize() {
-		return size;
-	}
+		public void setSubsize(String subsize) {
+			this.subsize = subsize;
+		}
 
-	public void setSize(String size) {
-		this.size = size;
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getSize() {
+			return size;
+		}
+
+		public void setSize(String size) {
+			this.size = size;
+		}
 	}
 }

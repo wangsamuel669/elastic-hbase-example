@@ -64,16 +64,21 @@ public class MyService {
 		document.setXcoord(csvRecord.get("xcoord"));
 		document.setYcoord(csvRecord.get("ycoord"));
 		document.setUserInfo(JSON.toJSONString(getUserInfo()));
-		document.setName(csvRecord.get("name"));
-		document.setSubname(csvRecord.get("subname"));
-		document.setSubsize(csvRecord.get("subname").length() + "");
-		document.setSize(csvRecord.get("name").length() + "");
+		List<MyDocument.Detail> list = new ArrayList<>();
+		MyDocument.Detail detail = new MyDocument.Detail();
+		detail.setName(csvRecord.get("name"));
+		detail.setSubname(csvRecord.get("subname"));
+		detail.setSubsize(csvRecord.get("subname").length() + "");
+		detail.setSize(csvRecord.get("name").length() + "");
+		list.add(detail);
+		document.setDetail(list);
 		return document;
 	}
 
 	public List search(MyDocument document) {
-		document.setSize(document.getName().length() + "");
-		document.setSubsize(document.getSubname().length() + "");
+		MyDocument.Detail detail = document.getDetail().get(0);
+		detail.setSize(detail.getName().length() + "");
+		detail.setSubsize(detail.getSubname().length() + "");
 		return elasticService.search(document);
 	}
 

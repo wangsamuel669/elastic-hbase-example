@@ -19,23 +19,28 @@
       "type": {
         "type": "keyword"
       },
-      "name": {
-        "type": "text"
-      },
-      "subname": {
-        "type": "text"
-      },
       "xcoord": {
         "type": "keyword"
       },
       "ycoord": {
         "type": "keyword"
       },
-      "subsize": {
-        "type": "keyword"
-      },
-      "size": {
-        "type": "keyword"
+      "detail": {
+        "type": "nested",
+        "properties": {
+          "name": {
+            "type": "text"
+          },
+          "subname": {
+            "type": "text"
+          },
+          "subsize": {
+            "type": "keyword"
+          },
+          "size": {
+            "type": "keyword"
+          }
+        }
       },
       "userInfo": {
         "type": "keyword",

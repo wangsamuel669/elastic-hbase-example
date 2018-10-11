@@ -2,6 +2,7 @@ package com.samule.example.elastic.service;
 
 import com.alibaba.fastjson.JSONReader;
 import com.samule.example.elastic.pojo.MyDocument;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -94,22 +95,22 @@ public class ElasticService {
 	}*/
 
 	private SearchQuery getSearchQuery(MyDocument document) {
+		MyDocument.Detail detail = document.getDetail().get(0);
 		QueryBuilder queryBuilder = null;
-		int size = Integer.parseInt(document.getSize());
+		int size = Integer.parseInt(detail.getSize());
 		if (size == 1) {
-			queryBuilder = getSameQuery(document);
+			queryBuilder = getSameQuery(detail);
 		} else if (size == 2) {
-			queryBuilder = QueryBuilders.boolQuery()
-					.should(getSameQuery(document))
+			QueryBuilder bool = QueryBuilders.boolQuery()
 					.should(QueryBuilders.boolQuery()
 							.filter(QueryBuilders.boolQuery()
 									.should(QueryBuilders.termQuery(INDEX_FIELD_SIZE, size + 1 + ""))
-									.should(QueryBuilders.termQuery(INDEX_FIELD_SIZE, document.getSize())))
-							.must(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(INDEX_FIELD_NAME, document.getName()).operator(Operator.AND))))
+									.should(QueryBuilders.termQuery(INDEX_FIELD_SIZE, detail.getSize())))
+							.must(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(INDEX_FIELD_NAME, detail.getName()).operator(Operator.AND))))
 					.minimumShouldMatch(1);
-
+			queryBuilder = QueryBuilders.nestedQuery("detail", bool, ScoreMode.Max);
 		} else {
-			queryBuilder = getOneQuery(document);
+			queryBuilder = getOneQuery(detail);
 		}
 
 		return new NativeSearchQueryBuilder()
@@ -119,26 +120,27 @@ public class ElasticService {
 				.build();
 	}
 
-	private QueryBuilder getSameQuery(MyDocument document) {
-		return QueryBuilders.boolQuery()
-				.filter(QueryBuilders.termQuery(INDEX_FIELD_SIZE, document.getSize()))
-				.must(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(INDEX_FIELD_NAME, document.getName()).operator(Operator.AND)));
+	private QueryBuilder getSameQuery(MyDocument.Detail detail) {
+		return QueryBuilders.nestedQuery("detail", QueryBuilders.boolQuery()
+				.filter(QueryBuilders.termQuery(INDEX_FIELD_SIZE, detail.getSize()))
+				.must(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(INDEX_FIELD_NAME, detail.getName()).operator(Operator.AND))), ScoreMode.Max);
 	}
 
-	private QueryBuilder getOneQuery(MyDocument document) {
-		int size = Integer.parseInt(document.getSize());
+	private QueryBuilder getOneQuery(MyDocument.Detail detail) {
+		int size = Integer.parseInt(detail.getSize());
+
 		QueryBuilder longQuery = QueryBuilders.boolQuery()
 				.filter(QueryBuilders.boolQuery()
 						.should(QueryBuilders.termQuery(INDEX_FIELD_SIZE, size + 2 + ""))
 						.should(QueryBuilders.termQuery(INDEX_FIELD_SIZE, size + 1 + ""))
-						.should(QueryBuilders.termQuery(INDEX_FIELD_SIZE, document.getSize())))
-				.must(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(INDEX_FIELD_NAME, document.getName()).operator(Operator.AND)));
+						.should(QueryBuilders.termQuery(INDEX_FIELD_SIZE, detail.getSize())))
+				.must(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(INDEX_FIELD_NAME, detail.getName()).operator(Operator.AND)));
 		QueryBuilder shortQuery = QueryBuilders.boolQuery()
 				.filter(QueryBuilders.boolQuery()
-						.should(QueryBuilders.termQuery(INDEX_FIELD_SIZE, Integer.parseInt(document.getSize()) - 1 + ""))
-						.should(QueryBuilders.termQuery(INDEX_FIELD_SIZE, Integer.parseInt(document.getSize()) - 2 + "")))
-				.must(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(INDEX_FIELD_NAME, document.getName()).operator(Operator.OR).minimumShouldMatch((size - 2 + ""))));
-		return QueryBuilders.boolQuery().should(longQuery).should(shortQuery).minimumShouldMatch(1);
+						.should(QueryBuilders.termQuery(INDEX_FIELD_SIZE, Integer.parseInt(detail.getSize()) - 1 + ""))
+						.should(QueryBuilders.termQuery(INDEX_FIELD_SIZE, Integer.parseInt(detail.getSize()) - 2 + "")))
+				.must(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(INDEX_FIELD_NAME, detail.getName()).operator(Operator.OR).minimumShouldMatch((size - 2 + ""))));
+		return QueryBuilders.nestedQuery("detail", QueryBuilders.boolQuery().should(longQuery).should(shortQuery).minimumShouldMatch(1), ScoreMode.Max);
 	}
 
 	private String readJsonFile(String filePath) throws IOException {
